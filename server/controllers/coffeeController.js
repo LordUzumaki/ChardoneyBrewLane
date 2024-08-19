@@ -1,11 +1,11 @@
 // Import the Coffee model from the coffeeModel file
-const Coffee = require('../models/coffeeModel');
+const coffee = require('../models/Coffee');
 
 // Function to get all coffee records from the database
 const getCoffee = async (req, res) => {
     try {
         // Fetch all coffee records from the database
-        const coffee = await Coffee.find();
+        const coffee = await coffee.find();
         // Send the fetched coffee records as a JSON response
         res.json(coffee);
     } catch (error) {
@@ -17,7 +17,7 @@ const getCoffee = async (req, res) => {
 const getCoffeeById = async (req, res) => {
     try {
         // Fetch a coffee record by its ID from the database
-        const coffee = await Coffee.findById(req.params.id);
+        const coffee = await coffee.findById(req.params.id);
         // If the coffee record is not found, send a 404 status code and a 'Coffee not found' message
         if (!coffee) res.status(404).json({ message: 'Coffee not found' });
         // Send the fetched coffee record as a JSON response

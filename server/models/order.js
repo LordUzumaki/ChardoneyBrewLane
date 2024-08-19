@@ -9,15 +9,15 @@ const mongoose = require('mongoose');
  * @property {String} status - The status of the order. Can be 'pending' or 'completed'.
  * @property {Date} timestamps - The timestamps for when the order was created and updated.
  */
-const orderSchema = new mongooes.Schema({
+const orderSchema = new mongoose.Schema({
     userId: {
-        type: mongooes.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
     },
     items: [{
         coffeeId: {
-            type: mongooes.Schema.Types.ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: 'Coffee',
             required: true
         },
