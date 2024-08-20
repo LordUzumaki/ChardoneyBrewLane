@@ -1,6 +1,6 @@
-// src/components/CoffeeList.jsx
 import React, { useEffect, useState } from 'react';
 import { getAllCoffees } from '../services/api/coffeeServices';
+
 const CoffeeList = () => {
     const [coffees, setCoffees] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -37,4 +37,4 @@ const CoffeeList = () => {
     );
 };
 
-export default CoffeeList; // Ensure this is the default export
+export default CoffeeList;

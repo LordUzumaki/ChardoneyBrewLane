@@ -5,15 +5,12 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const errorHandler = require('./middleware/errorHandler');
-
-// Initialize express
-const app = express();
-app.use(cors());
-app.use(express.json());
-
 require('dotenv').config(); // Load environment variables from a .env file into process.env
 
 const connectDB = require('./config/db'); // Load the database configuration
+
+const app = express();
+
 let coffeeRoutes, orderRoutes, userRoutes;
 
 // Load routes with error handling
@@ -40,6 +37,7 @@ try {
     console.error('Error loading UserRoutes module:', error);
     process.exit(1); // Exit the process if a critical module cannot be loaded
 }
+
 // Middleware
 app.use(helmet());
 app.use(morgan('dev'));
@@ -53,8 +51,10 @@ app.use('/api/orders', orderRoutes);   // Routes related to orders
 app.use('/api/users', userRoutes);     // Routes related to users
 
 app.use(errorHandler); // Error handling middleware
+
 // Connect to MongoDB
 connectDB();
+
 // Root route
 app.get('/', (req, res) => {
     res.send('Coffee Shop API is running...');

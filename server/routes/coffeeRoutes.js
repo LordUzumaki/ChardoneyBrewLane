@@ -1,9 +1,9 @@
-
 const express = require('express');
-const { getCoffee, getCoffeeById } = require('../controllers/coffeeController.js');
+const { getCoffee, getCoffeeById, getAllCoffees } = require('../controllers/coffeeController.js');
 const router = express.Router();
 
+router.get('/', getAllCoffees);
 router.get('/coffee', getCoffee);
-router.get('/coffee/:id', getCoffeeById);
+router.get('/:id', getCoffeeById);
 
 module.exports = router;

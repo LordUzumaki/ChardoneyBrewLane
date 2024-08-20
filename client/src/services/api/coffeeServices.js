@@ -1,7 +1,5 @@
-// src/service/api/coffeeService.js
 import axios from 'axios';
 
-// Base URL setup (could be environment-specific)
 const API_BASE_URL = '/api/coffees';
 
 export const getAllCoffees = async () => {
@@ -23,5 +21,3 @@ export const getCoffeeById = async (id) => {
         throw error;
     }
 };
-
-// Add more functions as needed for other API interactions
