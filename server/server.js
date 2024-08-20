@@ -48,9 +48,9 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Routes
-app.use('/coffees', coffeeRoutes); // Routes related to coffee
-app.use('/orders', orderRoutes);   // Routes related to orders
-app.use('/users', userRoutes);     // Routes related to users
+app.use('/api/coffees', coffeeRoutes); // Routes related to coffee
+app.use('/api/orders', orderRoutes);   // Routes related to orders
+app.use('/api/users', userRoutes);     // Routes related to users
 
 app.use(errorHandler); // Error handling middleware
 // Connect to MongoDB
