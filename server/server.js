@@ -46,7 +46,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Routes
-app.use('/api/coffees', coffeeRoutes); // Routes related to coffee
+app.use('/api/coffee', coffeeRoutes); // Routes related to coffee
 app.use('/api/orders', orderRoutes);   // Routes related to orders
 app.use('/api/users', userRoutes);     // Routes related to users
 

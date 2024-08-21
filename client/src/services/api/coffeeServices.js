@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = '/api/coffees';
+const API_BASE_URL = '/api/coffee';
 
 export const getAllCoffees = async () => {
     try {

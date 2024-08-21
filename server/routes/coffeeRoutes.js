@@ -3,7 +3,7 @@ const { getCoffee, getCoffeeById, getAllCoffees } = require('../controllers/coff
 const router = express.Router();
 
 router.get('/', getAllCoffees);
-router.get('/coffee', getCoffee);
+// router.get('/coffee', getCoffee);
 router.get('/:id', getCoffeeById);
 
 module.exports = router;

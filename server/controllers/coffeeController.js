@@ -3,22 +3,22 @@ const Coffee = require('../models/Coffee'); // Import the Coffee model
 // Function to get all coffee records from the database
 const getAllCoffees = async (req, res) => {
     try {
-        const coffees = await Coffee.find();
-        res.json(coffees);
+        const coffee = await Coffee.find();
+        res.json(coffee);
     } catch (error) {
         console.error('Error fetching coffees:', error); // Check if this logs any errors
         res.status(500).json({ message: error.message });
     }
 };
 
-const getCoffee = async (req, res) => {
-    try {
-        const coffee = await Coffee.find();
-        res.json(coffee);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
+// const getCoffee = async (req, res) => {
+//     try {
+//         const coffee = await Coffee.find();
+//         res.json(coffee);
+//     } catch (error) {
+//         res.status(500).json({ message: error.message });
+//     }
+// };
 
 const getCoffeeById = async (req, res) => {
     try {
@@ -34,6 +34,6 @@ const getCoffeeById = async (req, res) => {
 
 module.exports = {
     getAllCoffees,
-    getCoffee,
+    // getCoffee,
     getCoffeeById,
 };
