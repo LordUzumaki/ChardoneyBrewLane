@@ -13,7 +13,6 @@ const CoffeeList = () => {
                 setCoffees(data);
             } catch (error) {
                 setError('Failed to fetch coffees');
-                console.error(error);
             } finally {
                 setLoading(false);
             }
@@ -36,5 +35,6 @@ const CoffeeList = () => {
         </div>
     );
 };
+
 
 export default CoffeeList;

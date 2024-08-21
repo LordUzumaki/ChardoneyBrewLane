@@ -1,7 +1,7 @@
 // src/service/api/orderService.js
 import axios from 'axios';
 
-const API_BASE_URL = '/api/orders';
+const API_BASE_URL = 'localhost:5000/api/orders';
 
 export const getAllOrders = async () => {
     try {

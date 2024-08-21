@@ -1,5 +1,5 @@
 // server/middleware/authMiddleware.js
-const jwt = require('jsonwebtoken');
+import { verify } from 'jsonwebtoken';
 
 const authMiddleware = (req, res, next) => {
     const token = req.header('Authorization').replace('Bearer ', '');
@@ -9,7 +9,7 @@ const authMiddleware = (req, res, next) => {
     }
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const decoded = verify(token, process.env.JWT_SECRET);
         req.user = decoded; // Attach the decoded token payload to the request object
         next(); // Proceed to the next middleware or route handler
     } catch (err) {
@@ -17,4 +17,4 @@ const authMiddleware = (req, res, next) => {
     }
 };
 
-module.exports = authMiddleware;
+export default authMiddleware;
