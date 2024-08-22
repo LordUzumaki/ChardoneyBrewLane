@@ -1,5 +1,15 @@
 import Order from '../models/Order.js';
 
+export const getAllOrders = async (req, res) => {
+    try{
+        const orders = await Order.find();
+        res.json(orders);
+    }
+    catch(error){
+        res.status(500).json({ message: error.message });
+    }
+};
+
 export const createOrder = async (req, res) => {
     const { userId, items, totalAmount } = req.body;
     const order = new Order({ userId, items, totalAmount });
@@ -11,6 +21,8 @@ export const createOrder = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+
 
 export const getOrderById = async (req, res) => {
     try {
@@ -27,5 +39,6 @@ export const getOrderById = async (req, res) => {
 
 export default {
     createOrder,
+    getAllOrders,
     getOrderById,
 };
