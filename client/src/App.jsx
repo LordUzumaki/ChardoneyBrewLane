@@ -1,5 +1,7 @@
 // src/App.jsx
 import React from 'react';
+import './index.css'; // Make sure this line is in your index.js or App.js
+
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
@@ -11,7 +13,6 @@ import CartPage from './pages/CartPage';
 import CheckoutPage from './pages/CheckoutPage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
-import './index.css'; // Make sure this line is in your index.js or App.js
 
 
 function App() {
