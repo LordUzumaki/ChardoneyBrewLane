@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 function Header() {
   return (
-    <header className='py-12 bg-gray-900 text-gold-500'>
+    <header className='py-12 bg-yellow-600 text-gold-500'>
       <div className="container mx-auto flex items-center justify-between px-8">
         {/* Logo Section */}
         <div className="logo">
