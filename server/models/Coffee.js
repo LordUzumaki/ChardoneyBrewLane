@@ -1,30 +1,21 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-/**
- * @typedef {Object} CoffeeSchema
- * @property {string} name - The name of the coffee.
- * @property {number} price - The price of the coffee.
- * @property {string} description - The description of the coffee.
- * @property {string} imageUrl - The URL of the coffee's image.
- */
-const coffeeSchema = new mongoose.Schema({
+const { Schema, model } = mongoose;
+
+const coffeeSchema = new Schema({
     name: {
-        type: String,
-        required: true
-    },
-    price:{
-        type: Number,
-        required: true
-    },
-    description:{
         type: String,
         required: true,
     },
-    imageUrl:{
+    price: {
+        type: Number,
+        required: true,
+    },
+    description: {
         type: String,
-        required: true
     },
 });
 
-const Coffee = mongoose.model('Coffee', coffeeSchema);
-module.exports = Coffee;
+const Coffee = model('Coffee', coffeeSchema);
+
+export default Coffee;

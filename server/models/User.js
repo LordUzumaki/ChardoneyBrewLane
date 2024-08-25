@@ -1,33 +1,28 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-/**
- * User model schema.
- * @typedef {Object} User
- * @property {string} username - The username of the user.
- * @property {string} email - The email of the user.
- * @property {string} password - The password of the user.
- * @property {Date} createdAt - The timestamp when the user was created.
- * @property {Date} updatedAt - The timestamp when the user was last updated.
- */
-const User = new mongoose.Schema({
-    username:{
+const { Schema, model } = mongoose; // Destructure Schema and model from mongoose
+
+const userSchema = new Schema({
+    username: {
         type: String,
         required: true,
         unique: true,
     },
-    email:{
+    email: {
         type: String,
         required: true,
         unique: true,
     },
-    password:{
+    password: {
         type: String,
         required: true,
-
     },
-    
+    createdAt: {
+        type: Date,
+        default: Date.now,
+    },
+});
 
-}, { timestamps: true });
+const User = model('User', userSchema); // Use model function to create the User model
 
-const userModel = mongoose.model('User', User);
-module.exports = userModel;
+export default User; // Export the User model as the default export

@@ -13,7 +13,6 @@ const CoffeeList = () => {
                 setCoffees(data);
             } catch (error) {
                 setError('Failed to fetch coffees');
-                console.error(error);
             } finally {
                 setLoading(false);
             }
@@ -26,15 +25,20 @@ const CoffeeList = () => {
     if (error) return <p>{error}</p>;
 
     return (
-        <div>
-            <h1>Coffee Menu</h1>
-            <ul>
-                {coffees.map(coffee => (
-                    <li key={coffee._id}>{coffee.name}</li>
-                ))}
-            </ul>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {coffees.map((coffee) => (
+            <div key={coffee.id} className="bg-gray-800 rounded-lg overflow-hidden shadow-lg">
+              <img src="https://via.placeholder.com/300" alt={coffee.name} className="w-full h-48 object-cover" />
+              <div className="p-4">
+                <h3 className="text-2xl font-bold text-gold-500">{coffee.name}</h3>
+                <p className="text-gold-300 mt-2">{coffee.description}</p>
+                <p className="text-gold-400 mt-4">{coffee.price}</p>
+              </div>
+            </div>
+          ))}
         </div>
-    );
+      );
 };
+
 
 export default CoffeeList;

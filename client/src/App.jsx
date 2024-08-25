@@ -1,39 +1,47 @@
 // src/App.jsx
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import CoffeeList from './components/CoffeeList'; // Correct import
-import OrderList from './components/OrderList';  // Correctly import OrderList
-import UserProfile from './components/UserProfile';
+import './index.css'; // Make sure this line is in your index.js or App.js
+
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
+import Header from './components/Header';
+import Footer from './components/Footer';
+import HomePage from './pages/HomePage';
+import MenuPage from './pages/MenuPage';
+import CartPage from './pages/CartPage';
+import CheckoutPage from './pages/CheckoutPage';
+import LoginPage from './pages/LoginPage';
+import SignupPage from './pages/SignupPage';
+
+
 function App() {
   return (
     <Router>
-      <div className="App">
-        <nav>
-          <ul>
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/coffee">Coffees</Link></li>
-            <li><Link to="/orders">Orders</Link></li>
-            <li><Link to="/profile">Profile</Link></li>
-          </ul>
-        </nav>
-
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/coffee" element={<CoffeeList />} /> {/* Use the component here */}
-          <Route path="/orders" element={<OrderList />} />
-          <Route path="/profile" element={<UserProfile />} />
-        </Routes>
+      <div className="bg-gray-900 text-gold-500 min-h-screen">
+        <Header />
+        <main className='max-w-4xl mx-auto px-8 py-12'>
+          <Routes>
+            <Route path="/" exact component={<HomePage />} />
+            <Route path="/menu" element={<MenuPage />} />
+            <Route path="/cart" element={<CartPage />} />
+            <Route path="/checkout" element={<CheckoutPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />}/>
+            {/* <Route path="/about" component={AboutPage} /> */}
+            {/* <Route path="/contact" component={ContactPage} /> */}
+          </Routes>
+        </main>
+        <Footer />
       </div>
     </Router>
   );
 }
 
-function Home() {
-  return (
-    <div>
-      <h1>Welcome to Chardoney Brew Lane!</h1>
-    </div>
-  );
-}
+
 
 export default App;
+
+
+
+

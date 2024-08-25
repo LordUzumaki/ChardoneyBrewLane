@@ -1,48 +1,29 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const helmet = require('helmet');
-const morgan = require('morgan');
-const cookieParser = require('cookie-parser');
-const errorHandler = require('./middleware/errorHandler');
-require('dotenv').config(); // Load environment variables from a .env file into process.env
+import express, { json } from 'express';
+import mongoose from 'mongoose';
+import cors from 'cors';
+import helmet from 'helmet';
+import morgan from 'morgan';
+import cookieParser from 'cookie-parser';
+import coffeeRoutes from './routes/coffeeRoutes.js';
+import orderRoutes from './routes/orderRoutes.js';
+import userRoutes from './routes/userRoutes.js';
+import errorHandler from './middleware/errorHandler.js';
+import dotenv from 'dotenv';
+dotenv.config(); // Load environment variables
 
-const connectDB = require('./config/db'); // Load the database configuration
+import connectDB from './config/db.js'; // Load the database configuration
 
+
+// Initialize Express
 const app = express();
 
-let coffeeRoutes, orderRoutes, userRoutes;
 
-// Load routes with error handling
-try {
-    coffeeRoutes = require('./routes/coffeeRoutes');
-    console.log('CoffeeRoutes module loaded successfully');
-} catch (error) {
-    console.error('Error loading CoffeeRoutes module:', error);
-    process.exit(1); // Exit the process if a critical module cannot be loaded
-}
-
-try {
-    orderRoutes = require('./routes/orderRoutes');
-    console.log('Order module loaded successfully');
-} catch (error) {
-    console.error('Error loading Order module:', error);
-    process.exit(1); // Exit the process if a critical module cannot be loaded
-}
-
-try {
-    userRoutes = require('./routes/userRoutes');
-    console.log('UserRoutes module loaded successfully');
-} catch (error) {
-    console.error('Error loading UserRoutes module:', error);
-    process.exit(1); // Exit the process if a critical module cannot be loaded
-}
 
 // Middleware
 app.use(helmet());
 app.use(morgan('dev'));
 app.use(cors());
-app.use(express.json());
+app.use(json());
 app.use(cookieParser());
 
 // Routes
