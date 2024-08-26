@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:5000/api/coffees'; // need to work on it. I need to re-adjust the URL
+const API_BASE_URL = 'http://localhost:5000/api/coffee'; // need to work on it. I need to re-adjust the URL
 
 export const getAllCoffees = async () => {
     try {
