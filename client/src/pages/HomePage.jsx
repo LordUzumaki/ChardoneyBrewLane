@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 
 const HomePage = () => {
   return (
-    <div className="bg-gray-900 text-gold-500 min-h-screen">
+    <div className="bg-Yellow-600 text-gold-500 min-h-screen">
       <header className="text-center py-12">
         <h1 className="text-5xl font-extrabold font-serif text-gold-500">The Gatsby Coffee House</h1>
         <p className="text-lg italic mt-4 font-sans text-gold-200">

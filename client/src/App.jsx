@@ -18,7 +18,7 @@ import SignupPage from './pages/SignupPage';
 function App() {
   return (
     <Router>
-      <div className="bg-gray-900 text-gold-500 min-h-screen">
+      <div className="bg-yellow-600 text-gold-500 min-h-screen">
         <Header />
         <main className='max-w-4xl mx-auto px-8 py-12'>
           <Routes>

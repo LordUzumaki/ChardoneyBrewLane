@@ -2,8 +2,8 @@ import React from 'react';
 
 function Footer() {
   return (
-    <footer>
-      <div className="footer-content">
+    <footer className="fixed bottom-0 left-0 w-full bg-gray-800 text-white py-4">
+      <div className="container mx-auto text-left">
         <p>&copy; 2024 ChardoneyBrewLane. All rights reserved.</p>
         <nav>
           <ul>

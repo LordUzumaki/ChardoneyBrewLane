@@ -13,7 +13,7 @@ function Header() {
         </div>
 
         {/* Title */}
-        <h1 className="text-4xl font-extrabold font-serif text-gold-500 text-center flex-grow">
+        <h1 className="text-4xl Young20S text-gold-500 text-center flex-grow">
           Chardoney Brew Lane
         </h1>
 
