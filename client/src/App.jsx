@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
+import AboutPage from './pages/AboutPage';
 import MenuPage from './pages/MenuPage';
 import CartPage from './pages/CartPage';
 import CheckoutPage from './pages/CheckoutPage';
@@ -22,13 +23,14 @@ function App() {
         <Header />
         <main className='max-w-4xl mx-auto px-8 py-12'>
           <Routes>
-            <Route path="/" exact component={<HomePage />} />
+            <Route path="/" element={<HomePage />} />
+            <Route path="/about" element={<AboutPage />} />
             <Route path="/menu" element={<MenuPage />} />
             <Route path="/cart" element={<CartPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />}/>
-            {/* <Route path="/about" component={AboutPage} /> */}
+            
             {/* <Route path="/contact" component={ContactPage} /> */}
           </Routes>
         </main>
