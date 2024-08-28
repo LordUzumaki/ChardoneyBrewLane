@@ -1,4 +1,4 @@
-import Order from "../models/Order.js";
+import Order from '../models/Order.js';
 
 export const getAllOrders = async (req, res) => {
     try{
@@ -12,10 +12,10 @@ export const getAllOrders = async (req, res) => {
 
 export const createOrder = async (req, res) => {
     const { userId, items, totalAmount } = req.body;
-    const order = new Order({ userId, items, totalAmount });
+    const Order = new Order({ userId, items, totalAmount });
 
     try {
-        const savedOrder = await order.save();
+        const savedOrder = await Order.save();
         res.status(201).json(savedOrder);
     } catch (error) {
         res.status(500).json({ error: error.message });

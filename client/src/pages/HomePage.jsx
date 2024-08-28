@@ -16,10 +16,13 @@ const HomePage = () => {
       </header>
 
       <main className="w-full">
-        <section>
-          <div className="parallax bg-cover bg-fixed h-96 w-full" style={{ backgroundImage: "url('./src/assets/img/CoffeeShop.png"}}>
-
-          </div>
+        <section className="relative h-96 w-full">
+            <div
+              className="bg-cover bg-center sm:bg-top md:bg-center lg:bg-bottom bg-fixed h-full w-full"
+              style={{ backgroundImage: "url('/src/assets/img/CoffeeShop.png')" }}
+            >
+            {/* Add any content here if needed */}
+            </div>
         </section>
 
         <section className="my-12">
