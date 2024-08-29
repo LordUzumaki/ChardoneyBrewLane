@@ -23,15 +23,28 @@ Custom Fonts and Tailwind CSS: Tailored design elements using custom fonts and t
 
 #Technologies Used
 -Frontend:
+
 React.js
+
 Vite.js
+
 Tailwind CSS
+
+
 Backend:
+
 Node.js
+
 Express.js
+
 MongoDB
+
 Mongoose
+
 Other Tools:
+
 Docker
+
 JWT for authentication
+
 Axios for HTTP requests
