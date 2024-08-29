@@ -7,6 +7,10 @@ services:
       dockerfile: Dockerfile
     ports:
       - "5000:5000"
+    environment:
+      MONGO_URI: mongodb://mongo:27017/coffee_shop
+    depends_on:
+      - mongo
 
   frontend:
     build:
@@ -14,3 +18,15 @@ services:
       dockerfile: Dockerfile
     ports:
       - "5173:5173"
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - "/c/MongoDB/Server/7.0/data:/data/db"
+
+
+volumes:
+  mongo-data:
+  
