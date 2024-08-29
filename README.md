@@ -8,14 +8,21 @@ The website is built with a focus on responsiveness, ensuring it looks and funct
 More on the description later.
 
 Features (Work in Progress)
+
 Responsive Design: The website is designed to be fully responsive, offering an optimal viewing experience across a wide range of devices.
+
 Interactive Menu: Users can browse through a list of coffees and see detailed descriptions of each item.
+
 User Authentication: Includes sign-up and login functionalities to enhance user experience and personalization.
+
 Parallax Scrolling: Engaging parallax effects on the homepage to draw users in.
+
 Order Management: Users can add items to their cart, view their orders, and proceed to checkout.
+
 Custom Fonts and Tailwind CSS: Tailored design elements using custom fonts and the Tailwind CSS framework for styling.
-Technologies Used
-Frontend:
+
+#Technologies Used
+-Frontend:
 React.js
 Vite.js
 Tailwind CSS
