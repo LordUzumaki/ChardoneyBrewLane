@@ -11,6 +11,8 @@ services:
       MONGO_URI: mongodb://mongo:27017/coffee_shop
     depends_on:
       - mongo
+    networks:
+      - app-network
 
   frontend:
     build:
@@ -18,15 +20,20 @@ services:
       dockerfile: Dockerfile
     ports:
       - "5173:5173"
+    environment:
+      - VITE_API_BASE_URL=http://backend:5000/api
+    networks:
+      - app-network
 
   mongo:
     image: mongo:latest
     ports:
       - "27017:27017"
     volumes:
-      - "/c/MongoDB/Server/7.0/data:/data/db"
+      - "/c/data:/data/db"
+    networks:
+      - app-network
 
-
-volumes:
-  mongo-data:
-  
+networks:
+  app-network:
+    driver: bridge
