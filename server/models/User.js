@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
 
-const { Schema, model } = mongoose; // Destructure Schema and model from mongoose
+const { Schema, model } = mongoose;
 
 const userSchema = new Schema({
-    username: {
+    username: {  // Ensure consistent naming
         type: String,
         required: true,
         unique: true,
@@ -21,8 +21,12 @@ const userSchema = new Schema({
         type: Date,
         default: Date.now,
     },
+    isAdmin: {
+        type: Boolean,
+        default: false,
+    },
 });
 
-const User = model('User', userSchema); // Use model function to create the User model
+const User = model('User', userSchema);
 
-export default User; // Export the User model as the default export
+export default User;

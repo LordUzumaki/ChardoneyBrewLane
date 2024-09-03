@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:5000/api/coffee'; // need to work on it. I need to re-adjust the URL
+const API_BASE_URL = 'http://localhost:5000/api/coffee'; // Assuming this is the correct base URL
 
 export const getAllCoffees = async () => {
     try {
@@ -8,6 +8,24 @@ export const getAllCoffees = async () => {
         return response.data;
     } catch (error) {
         console.error('Error fetching coffee data:', error);
+        throw error;
+    }
+};
+
+export const addCoffee = async (coffeeData, token) => {
+    try {
+        const response = await axios.post(
+            `${API_BASE_URL}/add`, // Ensure the endpoint is correct
+            coffeeData,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`, // Include the authorization header with the token
+                },
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.error('Error adding coffee:', error);
         throw error;
     }
 };

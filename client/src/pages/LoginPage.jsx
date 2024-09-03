@@ -1,30 +1,38 @@
-// src/pages/LoginPage.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { login } from '../services/api/userServices';  // Import the login function
+import { useAuth } from '../hooks/useAuth';
+import { login } from '../services/api/userServices';
 
-const LoginPage = () => {
+const LoginPage = ({ setIsLoggedIn }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const { isLoggedIn } = useAuth();
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        setError(''); // Clear any previous error
+        setError('');
 
         try {
             const data = await login({ email, password });
-            console.log('Login successful:', data);
-            // Assuming successful login redirects to a dashboard or homepage
-            navigate('/dashboard');  // Adjust the path as needed
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('isAdmin', data.user.isAdmin);
+
+            setIsLoggedIn(true); // Set login status to true
+
+            if (data.user.isAdmin) {
+                navigate('/admin-dashboard');
+            } else {
+                navigate('/dashboard');
+            }
         } catch (error) {
             setError('Invalid email or password');
         }
     };
 
     return (
-        <div className="flex items-center justify-center min-h-half-screen  mt-8"> {/* Adjusted margin-top */}
+        <div className="flex items-center justify-center min-h-half-screen mt-8">
             <div className="w-full max-w-sm bg-white p-6 rounded-lg shadow-md">
                 <h1 className="text-2xl font-bold mb-4 text-center">Log In</h1>
                 <form onSubmit={handleLogin}>

@@ -14,6 +14,17 @@ const coffeeSchema = new Schema({
     description: {
         type: String,
     },
+    imageUrl: {
+        type: String,
+    },
+    category: {
+        type: String,
+        required: true,
+    },
+    available: {
+        type: Boolean,
+        default: true,
+    },
 });
 
 const Coffee = model('Coffee', coffeeSchema);

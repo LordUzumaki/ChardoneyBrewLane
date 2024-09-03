@@ -3,6 +3,27 @@
 // Import necessary modules/models
 import Coffee from '../models/Coffee.js';  // Assuming Coffee is the model you're working with
 
+
+export const insertCoffee = async (req, res) => {
+    try {
+        const { name, price, description, imageUrl, category, available } = req.body;
+
+        const newCoffee = new Coffee({
+            name,
+            price,
+            description,
+            imageUrl,
+            category,
+            available,
+        });
+
+        const savedCoffee = await newCoffee.save();
+        res.status(201).json(savedCoffee);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 // Controller function to get all coffees
 export const getAllCoffees = async (req, res) => {
     try {
@@ -26,6 +47,7 @@ export const getCoffeeById = async (req, res) => {
 
 
 export default {
+    insertCoffee,
     getAllCoffees,
     getCoffeeById,
 };

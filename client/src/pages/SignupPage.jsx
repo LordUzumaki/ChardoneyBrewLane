@@ -1,22 +1,21 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signup } from '../services/api/userServices';  // Import the signup function
+import { signup } from '../services/api/userServices';
 
 const SignupPage = () => {
+    const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [username, setUsername] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
     const handleSignup = async (e) => {
         e.preventDefault();
-        setError(''); // Clear any previous error
+        setError('');
 
         try {
-            const data = await signup({ email, password, username });
-            console.log('Signup successful:', data);
-            navigate('/login');  // Adjust the path as needed
+            const data = await signup({ username, email, password });
+            navigate('/login');
         } catch (error) {
             setError('Signup failed. Please try again.');
         }
