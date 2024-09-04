@@ -14,15 +14,11 @@ export const getAllCoffees = async () => {
 
 export const addCoffee = async (coffeeData, token) => {
     try {
-        const response = await axios.post(
-            `${API_BASE_URL}/add`, // Ensure the endpoint is correct
-            coffeeData,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`, // Include the authorization header with the token
-                },
-            }
-        );
+        const response = await axios.post(`${API_BASE_URL}/add`, coffeeData, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+        });
         return response.data;
     } catch (error) {
         console.error('Error adding coffee:', error);

@@ -1,26 +1,41 @@
 import React, { useState } from 'react';
-import { addCoffee } from '../services/api/coffeeServices';
+import { addCoffee } from '../services/api/coffeeServices'; // Ensure this function handles file uploads
 
 const AddCoffeeForm = () => {
     const [formData, setFormData] = useState({
         name: '',
         price: '',
         description: '',
-        imageUrl: '',
         category: '',
         available: true,
     });
+    const [imageFile, setImageFile] = useState(null); // Store the selected image file
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    const handleImageChange = (e) => {
+        setImageFile(e.target.files[0]);  // Capture the file
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage
+        const token = localStorage.getItem('token'); // Get the auth token from localStorage
+
+        // Prepare form data for submission, including file upload
+        const coffeeFormData = new FormData();
+        coffeeFormData.append('name', formData.name);
+        coffeeFormData.append('price', formData.price);
+        coffeeFormData.append('description', formData.description);
+        coffeeFormData.append('category', formData.category);
+        coffeeFormData.append('available', formData.available);
+        coffeeFormData.append('image', imageFile);  // Append the file
+
+        console.log(formData); // Log the form data for debugging
 
         try {
-            const response = await addCoffee(formData, token); // Use the addCoffee function from the service
+            const response = await addCoffee(coffeeFormData, token); // Send form data
             console.log('Coffee added:', response);
             // Optionally, clear the form or show a success message
         } catch (error) {
@@ -29,7 +44,7 @@ const AddCoffeeForm = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4" encType="multipart/form-data">
             <input 
                 name="name" 
                 value={formData.name} 
@@ -56,10 +71,9 @@ const AddCoffeeForm = () => {
                 className="w-full p-2 border rounded"
             />
             <input 
-                name="imageUrl" 
-                value={formData.imageUrl} 
-                onChange={handleChange} 
-                placeholder="Image URL" 
+                name="image" 
+                type="file"
+                onChange={handleImageChange}  // Handle image file change
                 className="w-full p-2 border rounded"
             />
             <input 

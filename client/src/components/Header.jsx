@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import AuthButton from './AuthButton';
 import logo from '../assets/img/NewCoffeeLogo.png'; // Import the image
 
-function Header({ isLoggedIn, setIsLoggedIn }) {
+function Header({ isLoggedIn, setIsLoggedIn, isAdmin, setIsAdmin }) {
   return (
     <header className="relative h-40 bg-yellow-600 text-gold-500">
       <video autoPlay loop muted className="absolute inset-0 w-full h-full object-cover">
@@ -27,7 +27,8 @@ function Header({ isLoggedIn, setIsLoggedIn }) {
         {/* Use the AuthButton component */}
         <div className="flex space-x-1 lg:ml-8 lg:border-l lg:border-slate-900/15 lg:pl-8">
           <Link to="/cart" className="text-white hover:underline px-4">Cart</Link>
-          <AuthButton isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} /> {/* This replaces the static "Login" and "Sign up" buttons */}
+          <AuthButton isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} isAdmin={isAdmin} setIsAdmin={setIsAdmin}  /> {/* This replaces the static "Login" and "Sign up" buttons */}
+          
         </div>
       </div>
     </header>

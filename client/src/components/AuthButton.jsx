@@ -1,23 +1,35 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const AuthButton = ({ isLoggedIn, setIsLoggedIn }) => {
+const AuthButton = ({ isLoggedIn, setIsLoggedIn, isAdmin, setIsAdmin }) => {
     const navigate = useNavigate();
 
     const handleLogOut = () => {
         localStorage.removeItem('token');
+        localStorage.removeItem('isAdmin');
         setIsLoggedIn(false);
+        setIsAdmin(false);  // Reset the isAdmin state
         navigate('/');
     };
 
     return (
         <div>
             {isLoggedIn ? (
-                <button
-                    onClick={handleLogOut}
-                    className="text-white hover:underline px-4">
-                    Log Out
-                </button>
+                <>
+                     {/* Conditionally show Admin button if user is an admin */}
+                    {isAdmin && (
+                        <button
+                            onClick={() => navigate('/admin-dashboard')}
+                            className="text-white hover:underline px-4">
+                            Admin
+                        </button>
+                    )}
+                    <button
+                        onClick={handleLogOut}
+                        className="text-white hover:underline px-4">
+                        Log Out
+                    </button>
+                </>
             ) : (
                 <>
                     <button

@@ -1,3 +1,5 @@
+import path from 'path';
+import { fileURLToPath } from 'url';
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
@@ -12,8 +14,11 @@ import connectDB from './config/db.js';
 import coffeeRoutes from './routes/coffeeRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import userRoutes from './routes/userRoutes.js';
-
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const app = express();
+
+app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 // Middleware
 app.use(helmet());
@@ -26,6 +31,9 @@ app.use(cookieParser());
 app.use('/api/coffee', coffeeRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/users', userRoutes);
+
+
+
 
 app.use((err, req, res, next) => {
     console.error(err.stack);

@@ -6,7 +6,15 @@ import Coffee from '../models/Coffee.js';  // Assuming Coffee is the model you'r
 
 export const insertCoffee = async (req, res) => {
     try {
-        const { name, price, description, imageUrl, category, available } = req.body;
+        const { name, price, description, category, available } = req.body;
+        
+        // Ensure the file has been uploaded
+        const imageUrl = req.file ? `./uploads/${req.file.filename}` : null;
+
+
+        if (!name || !price || !description || !category || available === undefined || !imageUrl) {
+            return res.status(400).json({ message: 'All fields are required' });
+        }
 
         const newCoffee = new Coffee({
             name,
@@ -23,7 +31,6 @@ export const insertCoffee = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
-
 // Controller function to get all coffees
 export const getAllCoffees = async (req, res) => {
     try {
