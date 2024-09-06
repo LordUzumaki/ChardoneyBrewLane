@@ -28,7 +28,11 @@ const CoffeeList = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {coffees.map((coffee) => (
                 <div key={coffee.id || coffee._id} className="bg-gray-800 rounded-lg overflow-hidden shadow-lg">
-                    <img src={coffee.imageUrl} alt={coffee.name} className="w-full h-48 object-cover" />
+                    <img
+                      src={`http://localhost:5000${coffee.imageUrl}`}
+                      alt={coffee.name}
+                      className="w-full h-48 object-cover"
+                    />
                     <div className="p-4">
                         <h3 className="text-2xl font-bold text-gold-500">{coffee.name}</h3>
                         <p className="text-gold-300 mt-2">{coffee.description}</p>

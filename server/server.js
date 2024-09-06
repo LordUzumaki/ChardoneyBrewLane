@@ -6,7 +6,9 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
+import fs from 'fs';
 import dotenv from 'dotenv';
+import upload from './middleware/uploadMiddleware.js';
 
 dotenv.config(); // Load environment variables
 
@@ -14,11 +16,21 @@ import connectDB from './config/db.js';
 import coffeeRoutes from './routes/coffeeRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import userRoutes from './routes/userRoutes.js';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
+
+// const uploadsPath = path.join(__dirname, 'uploads');
+// if (!fs.existsSync(uploadsPath)) {
+//     fs.mkdirSync(uploadsPath);
+// }
+
+
 const app = express();
 
-app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
+app.use('/uploads', upload.single('image'), express.static('uploads'));
+
+
+
 
 // Middleware
 app.use(helmet());
