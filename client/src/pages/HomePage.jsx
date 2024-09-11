@@ -16,14 +16,22 @@ const HomePage = () => {
       </header>
 
       <main className="w-full">
-        <section className="relative h-96 w-full">
-            <div
-              className="bg-cover bg-center sm:bg-top md:bg-center lg:bg-bottom bg-fixed h-full w-full"
-              style={{ backgroundImage: "url('/src/assets/img/CoffeeShop.png')" }}
-            >
-            {/* Add any content here if needed */}
-            </div>
+        <section className="relative w-full h-[100vh] sm:h-[80vh] lg:h-[90vh] xl:h-[100vh] 2xl:h-[110vh]">
+          <div
+            className="bg-cover bg-center bg-fixed h-full w-full"
+            style={{
+              backgroundImage: "url('/src/assets/img/CoffeeShop.png')",
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
+            }}
+          >
+            {/* You can add content or additional styling here */}
+          </div>
         </section>
+
+
+  
 
         <section className="my-12">
           <h2 className="text-3xl font-bold font-Young20S text-gold-500 mb-4">About Us</h2>
