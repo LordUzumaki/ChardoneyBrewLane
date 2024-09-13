@@ -19,6 +19,7 @@ import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import AddCoffeePage from './pages/AddCoffeePage';
 import DashboardPage from './pages/DashboardPage';
+import EditCoffeePage from './pages/EditCoffeePage.jsx'; // Import the EditCoffeePage component
 import AdminDashboardPage from './pages/AdminDashboardPage.jsx'; // Import the AdminDashboardPage component
 
 function App() {
@@ -26,15 +27,16 @@ function App() {
   return (
     <Router>
       <div className="bg-yellow-600 text-gold-500 min-h-screen">
-        <Header 
-          isLoggedIn={isLoggedIn} 
-          setIsLoggedIn={setIsLoggedIn} 
-          isAdmin={isAdmin} 
-          setIsAdmin={setIsAdmin} 
+        <Header
+          isLoggedIn={isLoggedIn}
+          setIsLoggedIn={setIsLoggedIn}
+          isAdmin={isAdmin}
+          setIsAdmin={setIsAdmin}
         />
         <main className='max-w-4xl mx-auto px-8 py-12'>
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/edit-coffee/:id" element={<EditCoffeePage />} /> {/* Add this route */}
             <Route path="/about" element={<AboutPage />} />
             <Route path="/menu" element={<MenuPage />} />
             <Route path="/cart" element={<CartPage />} />

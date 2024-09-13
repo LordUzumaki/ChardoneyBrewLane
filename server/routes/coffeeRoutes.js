@@ -14,6 +14,6 @@ router.post('/add', protect, admin, upload.single('image'), addCoffee);
 router.get('/:id', getCoffeeById);
 
 router.delete('/:_id', protect, admin, deleteCoffee);
-router.put('/:_id', protect, admin, upload.single('image'), updateCoffee);
+router.put('/:id', protect, admin, upload.single('image'), updateCoffee);
 
 export default router;

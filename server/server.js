@@ -1,12 +1,8 @@
-import path from 'path';
-import { fileURLToPath } from 'url';
 import express from 'express';
-import mongoose from 'mongoose';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
-import fs from 'fs';
 import dotenv from 'dotenv';
 import upload from './middleware/uploadMiddleware.js';
 

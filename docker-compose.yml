@@ -8,7 +8,8 @@ services:
     volumes:
       - ./uploads:/app/uploads
     environment:
-      MONGO_URI: mongodb://mongo:27017/coffee_shop
+      MONGO_URI: mongodb+srv://Teddy1224:O%40thk33p3r@chardoneybrewlane.ce45g.mongodb.net/coffee_shop
+
     depends_on:
       - mongo
     networks:

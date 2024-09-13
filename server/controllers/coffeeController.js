@@ -31,6 +31,7 @@ export const addCoffee = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
 // Controller function to get all coffees
 export const getAllCoffees = async (req, res) => {
     try {
@@ -52,30 +53,22 @@ export const deleteCoffee = async (req, res) =>{
 };
 
 export const updateCoffee = async (req, res) => {
-    
+    try {
+        const { id } = req.params; // Make sure you're extracting the ID correctly
+        const updatedData = req.body;
 
-    try{
-        const { name, price, description, category, available } = req.body;
-        const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
-        const updatedCoffee = await Coffee.findByIdAndUpdate(req.params._id,
-            {
-                name,
-                price,
-                description,
-                imageUrl,
-                category,
-                available,
-            },
-            {new: true, runValidators: true}
-        );
-        if(!updatedCoffee){
-            return res.status(404).json({message: 'Coffee not found'});
+        const updatedCoffee = await Coffee.findByIdAndUpdate(id, updatedData, { new: true });
+
+        if (!updatedCoffee) {
+            return res.status(404).json({ message: 'Coffee not found' });
         }
-        res.json(200).json(updatedCoffee);
-    }catch(error){
-        res.status(500).json({message: error.message});
+
+        return res.json(updatedCoffee); // Return the updated coffee details
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 };
+
 
 // Controller function to get a coffee by ID
 export const getCoffeeById = async (req, res) => {

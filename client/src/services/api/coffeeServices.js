@@ -26,6 +26,39 @@ export const addCoffee = async (coffeeData, token) => {
     }
 };
 
+// Fix: Use API_BASE_URL and include Authorization header
+export const deleteCoffee = async (id, token) => {
+    try {
+        const response = await axios.delete(`${API_BASE_URL}/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error deleting coffee:', error);
+        throw error;
+    }
+};
+
+// Fix: Use API_BASE_URL and include Authorization header
+export const updateCoffee = async (id, coffeeData, token) => {
+    try {
+        const response = await axios.put(`${API_BASE_URL}/${id}`, coffeeData, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error updating coffee:', error);
+        throw error;
+    }
+};
+
+
+
+
 export const getCoffeeById = async (id) => {
     try {
         const response = await axios.get(`${API_BASE_URL}/${id}`);
