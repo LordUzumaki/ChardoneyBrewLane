@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
-import { addCoffee } from '../services/api/coffeeServices'; // Ensure this function handles file uploads
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { addCoffee, getCoffeeById } from '../services/api/coffeeServices';
 
 const AddCoffeeForm = () => {
+    const { id } = useParams();  // Use ID if editing
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         name: '',
         price: '',
@@ -9,39 +12,58 @@ const AddCoffeeForm = () => {
         category: '',
         available: true,
     });
-    const [imageFile, setImageFile] = useState(null); // Store the selected image file
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const [imageFile, setImageFile] = useState(null);  // Image file state
+
+    useEffect(() => {
+        const fetchCoffee = async () => {
+            if (id) {
+                setLoading(true);
+                try {
+                    const data = await getCoffeeById(id);
+                    setFormData(data);
+                } catch (error) {
+                    setError('Failed to fetch coffee details');
+                } finally {
+                    setLoading(false);
+                }
+            }
+        };
+        fetchCoffee();
+    }, [id]);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
     const handleImageChange = (e) => {
-        setImageFile(e.target.files[0]);  // Capture the file
+        setImageFile(e.target.files[0]);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const token = localStorage.getItem('token'); // Get the auth token from localStorage
+        const token = localStorage.getItem('token');  // Get auth token
 
-        // Prepare form data for submission, including file upload
         const coffeeFormData = new FormData();
         coffeeFormData.append('name', formData.name);
         coffeeFormData.append('price', formData.price);
         coffeeFormData.append('description', formData.description);
         coffeeFormData.append('category', formData.category);
         coffeeFormData.append('available', formData.available);
-        coffeeFormData.append('image', imageFile);  // Append the file
-
-        console.log(formData); // Log the form data for debugging
+        if (imageFile) coffeeFormData.append('image', imageFile);  // Append image if available
 
         try {
-            const response = await addCoffee(coffeeFormData, token); // Send form data
-            console.log('Coffee added:', response);
-            // Optionally, clear the form or show a success message
+            await addCoffee(coffeeFormData, token);  // Use the API to add or update
+            navigate('/menu');  // Redirect to menu after submission
         } catch (error) {
-            console.error('Error adding coffee:', error);
+            setError('Error submitting coffee');
+            console.error(error);
         }
     };
+
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>{error}</p>;
 
     return (
         <form onSubmit={handleSubmit} className="space-y-4" encType="multipart/form-data">
@@ -94,7 +116,7 @@ const AddCoffeeForm = () => {
                 Available
             </label>
             <button type="submit" className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
-                Add Coffee
+                {id ? 'Update Coffee' : 'Add Coffee'}  {/* Change button text based on action */}
             </button>
         </form>
     );

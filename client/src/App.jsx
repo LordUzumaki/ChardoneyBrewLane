@@ -37,6 +37,7 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/edit-coffee/:id" element={<EditCoffeePage />} /> {/* Add this route */}
+            <Route path="/add-coffee" element={<AddCoffeePage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/menu" element={<MenuPage />} />
             <Route path="/cart" element={<CartPage />} />

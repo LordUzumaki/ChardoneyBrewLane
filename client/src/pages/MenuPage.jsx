@@ -1,10 +1,15 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';  // Import useNavigate for navigation
 import CoffeeList from '../components/CoffeeList';
-import AddCoffeeForm from '../components/AddCoffeeForm';
 import { useAuth } from '../hooks/useAuth';
 
 const MenuPage = () => {
   const { isAdmin } = useAuth();
+  const navigate = useNavigate();  // Hook to handle navigation
+
+  const handleAddCoffee = () => {
+    navigate('/add-coffee');  // Redirect to /add-coffee page
+  };
 
   return (
     <div className="bg-yellow-600 text-gold-500 min-h-screen">
@@ -21,11 +26,15 @@ const MenuPage = () => {
         {/* Display the coffee list */}
         <CoffeeList />
 
-        {/* Only show AddCoffeeForm if the user is an admin */}
+        {/* Only show Add Coffee button if the user is an admin */}
         {isAdmin && (
-          <div className="mt-8">
-            <h2 className="text-2xl font-bold mb-4">Add a New Coffee</h2>
-            <AddCoffeeForm />
+          <div className="mt-8 text-center">
+            <button
+              onClick={handleAddCoffee}  // Call the function to navigate to /add-coffee
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            >
+              Add New Coffee
+            </button>
           </div>
         )}
       </main>
@@ -34,4 +43,3 @@ const MenuPage = () => {
 };
 
 export default MenuPage;
-
