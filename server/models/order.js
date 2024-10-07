@@ -1,25 +1,17 @@
 import mongoose from 'mongoose';
 
-const { Schema, model } = mongoose; // Destructure the necessary functions
-
-const orderSchema = new Schema({
-    userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true,
-    },
+const orderSchema = new mongoose.Schema({
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     items: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Coffee',
-        },
+      {
+        name: String,
+        price: Number,
+        quantity: Number,
+      },
     ],
-    totalAmount: {
-        type: Number,
-        required: true,
-    },
-});
+    status: { type: String, enum: ['cart', 'completed', 'cancelled'], default: 'cart' },
+    totalPrice: { type: Number, required: true },
+  });
+const Order = mongoose.model('Order', orderSchema);
 
-const Order = model('Order', orderSchema); // Use the 'model' function to create the model
-
-export default Order; // Export the Order model as default
+export default Order;
