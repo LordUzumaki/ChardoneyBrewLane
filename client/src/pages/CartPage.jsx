@@ -1,46 +1,48 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import OrderList from '../components/OrderList';
-import { getAllOrders } from '../services/api/orderServices'; // Import the API function to get orders
+import { getCart } from '../services/api/cartServices';  // Ensure this is correctly implemented
 
-function CartPage() {
-  const [orders, setOrders] = useState([]);
+const CartPage = () => {
+  const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchOrders = async () => {
+    const fetchCart = async () => {
       try {
-        const data = await getAllOrders();
-        setOrders(data); // Populate the cart with fetched orders
+        const data = await getCart();  // Fetch cart from backend
+        console.log('Cart data:', data);
+        setCart(data);
       } catch (error) {
-        console.error("Failed to fetch orders:", error);
+        setError('Failed to load cart');
+        console.error('Error fetching cart:', error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchOrders();
+    fetchCart();
   }, []);
 
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
+
   return (
-    <div className="cart-page">
-      {loading ? (
-        <p>Loading cart...</p>
-      ) : orders.length > 0 ? (
-        <>
-          <OrderList orders={orders} />
-          <Link to="/checkout" className="btn-primary">
-            Proceed to Checkout
-          </Link>
-        </>
+    <div>
+      <h1>Your Cart</h1>
+      {cart && cart.items.length > 0 ? (
+        <ul>
+          {cart.items.map(item => (
+            <li key={item._id}>
+              {item.name} - Quantity: {item.quantity} - Price: ${item.price * item.quantity}
+            </li>
+          ))}
+        </ul>
       ) : (
-        <>
-          <h1>Your Cart is Empty</h1>
-          <Link to="/menu">Back to Menu</Link>
-        </>
+        <p>Your cart is empty.</p>
       )}
+      <p>Total Price: ${cart.totalPrice}</p>
     </div>
   );
-}
+};
 
 export default CartPage;

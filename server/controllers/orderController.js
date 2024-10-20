@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import Order from '../models/Order.js';
 
 // Fetch all orders for the current user
@@ -13,11 +14,11 @@ export const getAllOrders = async (req, res) => {
 // Create a new order
 export const createOrder = async (req, res) => {
   try {
-    const { items, totalAmount } = req.body;  // Assuming items and totalAmount are sent in request body
+    const { items, totalPrice } = req.body;  // Assuming items and totalAmount are sent in request body
     const newOrder = new Order({
       userId: req.user._id,
       items,
-      totalAmount,
+      totalPrice,
       status: 'pending',  // Set initial status
     });
     const savedOrder = await newOrder.save();
@@ -89,6 +90,69 @@ export const checkout = async (req, res) => {
   }
 };
 
+const GUEST_USER_ID = 'guest_user_id'; // ID of your predefined guest user
+export const addItemToCart = async (req, res) => {
+  const { coffeeId, name, price } = req.body;
+  const userId = req.user ? req.user._id : GUEST_USER_ID;
+
+  try {
+    let order = await Order.findOne({ userId, status: 'cart' });
+
+    if (!order) {
+      order = new Order({
+        userId,
+        items: [{ coffeeId, name, price, quantity: 1 }],
+        totalPrice: price,
+        status: 'cart',
+      });
+    } else {
+      const existingItem = order.items.find(item => item.coffeeId.equals(coffeeId));
+
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        order.items.push({ coffeeId, name, price, quantity: 1 });
+      }
+
+      order.totalPrice = order.items.reduce((total, item) => total + item.price * item.quantity, 0);
+    }
+
+    await order.save();
+    res.json(order);
+  } catch (error) {
+    res.status(500).json({ message: 'Error adding item to cart' });
+  }
+};
+
+
+
+
+
+export const getCart = async (req, res) => {
+  const userId = req.user ? req.user._id : GUEST_USER_ID;  // Use guest user if not logged in
+
+  try {
+    const order = await Order.findOne({ userId, status: 'cart' }).populate('items.coffeeId');
+
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    res.json(order);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching cart', error: error.message });
+  }
+};
+
+
+
+
+
+
+
+
+
+
 // Export all the controller functions
 export default {
   createOrder,
@@ -97,5 +161,7 @@ export default {
   removeOrder,
   getOrderById,
   checkout,
+  addItemToCart,
+  getCart,
 };
 
