@@ -72,6 +72,74 @@ export const getOrderById = async (req, res) => {
   }
 };
 
+export const addItemToCart = async (req, res) => {
+  const { coffeeId, name, price } = req.body;
+
+  // Ensure required data is provided
+  if (!coffeeId || !name || !price) {
+    return res.status(400).json({ message: 'Invalid item data' });
+  }
+
+  try {
+    // Use session ID for unauthenticated users (or generate a guest ID)
+    const sessionId = req.sessionID || 'guest';  // Fallback to guest if no session ID
+    
+    let order = await Order.findOne({ sessionId });
+
+    // If no cart exists for the session, create a new one
+    if (!order) {
+      order = new Order({
+        sessionId,
+        items: [{ coffeeId, name, price, quantity: 1 }],
+        totalAmount: price,
+        status: 'cart',  // Status of the cart
+      });
+    } else {
+      // Check if the item is already in the cart
+      const existingItem = order.items.find(item => item.coffeeId === coffeeId);
+
+      if (existingItem) {
+        existingItem.quantity += 1;  // Increase quantity if item exists
+      } else {
+        order.items.push({ coffeeId, name, price, quantity: 1 });  // Add new item if not in cart
+      }
+
+      // Recalculate total amount
+      order.totalAmount = order.items.reduce((total, item) => total + item.price * item.quantity, 0);
+    }
+
+    // Save the updated order (cart)
+    await order.save();
+    res.json(order);
+  } catch (error) {
+    res.status(500).json({ message: 'Error adding item to cart', error: error.message });
+  }
+};
+
+
+
+
+//Get cart details
+export const getCart = async (req, res) => {
+  const sessionId = req.sessionID || 'guest';  // Use session ID for non-auth users
+  
+  try {
+    // Look for a cart associated with the session ID
+    const order = await Order.findOne({ sessionId, status: 'cart' }).populate('items.coffeeId');
+
+    if (!order) {
+      return res.status(404).json({ message: 'Cart is empty' });  // No cart found
+    }
+
+    res.json(order);  // Return cart details
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching cart', error: error.message });
+  }
+};
+
+
+
+
 // Implement the checkout logic (e.g., process payment, finalize order)
 export const checkout = async (req, res) => {
   // Example checkout logic (details depend on your business logic)
@@ -163,5 +231,6 @@ export default {
   checkout,
   addItemToCart,
   getCart,
+  addItemToCart,
+  getCart,
 };
-

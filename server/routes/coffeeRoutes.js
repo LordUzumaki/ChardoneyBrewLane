@@ -2,7 +2,7 @@
 
 import { Router } from 'express';
 
-import { getAllCoffees, getCoffeeById, addCoffee, deleteCoffee, updateCoffee} from '../controllers/coffeeController.js';
+import { getAllCoffees, getCoffeeById, addCoffee, deleteCoffee, updateCoffee } from '../controllers/coffeeController.js';
 import upload from '../middleware/uploadMiddleware.js';
 import { protect, admin } from '../middleware/authMiddleware.js';
 

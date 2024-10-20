@@ -1,49 +1,57 @@
 import React, { useEffect, useState } from 'react';
-import { getAllCoffees } from '../services/api/coffeeServices'; 
-import { addItemToCart } from '../services/api/cartServices'; // Import cart service
+import { getAllCoffees, deleteCoffee } from '../services/api/coffeeServices'; // Import deleteCoffee
+import { useNavigate } from 'react-router-dom'; // Assuming you'll navigate to an edit page
+import useAuth from '../hooks/useAuth'; // Import your auth hook
 
 const CoffeeList = () => {
     const [coffees, setCoffees] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate(); // Use navigate for redirection to edit
+    const { isAdmin } = useAuth(); // Use the auth hook to get isAdmin status
+    const token = localStorage.getItem('token'); // Assuming token is stored in localStorage
 
-    useEffect(() => {
-        const fetchCoffees = async () => {
+  // Fetch all coffees
+  useEffect(() => {
+    const fetchCoffees = async () => {
+      try {
+        const data = await getAllCoffees(); // Fetch coffee data from API
+        setCoffees(data); // Set fetched coffees to state
+      } catch (err) {
+        setError('Failed to fetch coffees'); // Catch and set any errors
+      } finally {
+        setLoading(false); // Ensure loading stops
+      }
+    };
+
+    fetchCoffees();
+  }, []);
+
+    const handleDelete = async (id) => {
+        const confirmed = window.confirm('Are you sure you want to delete this coffee?');
+        if (confirmed) {
             try {
-                const data = await getAllCoffees();
-                setCoffees(data);
+                await deleteCoffee(id, token); // Pass token for authorization
+                setCoffees(coffees.filter(coffee => coffee._id !== id));
             } catch (error) {
-                setError('Failed to fetch coffees');
-            } finally {
-                setLoading(false);
+                setError('Failed to delete coffee');
             }
-        };
-
-        fetchCoffees();
-    }, []);
-
-    const handleAddToCart = async (coffee) => {
-        const coffeeData = {
-            coffeeId: coffee._id, // or coffee.id depending on your schema
-            name: coffee.name,
-            price: coffee.price,
-        };
-
-        try {
-            await addItemToCart(coffeeData); // Send coffee data to the cart service
-            console.log('Coffee added to cart');
-        } catch (error) {
-            console.error('Error adding coffee to cart:', error);
         }
     };
 
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>{error}</p>;
+    const handleEdit = (id) => {
+        // Navigate to the edit page or open a modal for editing
+        navigate(`/edit-coffee/${id}`);
+    };
+
+  // Loading and error handling
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {coffees.map((coffee) => (
-                <div key={coffee._id} className="bg-gray-800 rounded-lg overflow-hidden shadow-lg">
+                <div key={coffee.id || coffee._id} className="bg-gray-800 rounded-lg overflow-hidden shadow-lg">
                     <img
                         src={`http://localhost:5000${coffee.imageUrl}`}
                         alt={coffee.name}
@@ -52,13 +60,24 @@ const CoffeeList = () => {
                     <div className="p-4">
                         <h3 className="text-2xl font-bold text-gold-500">{coffee.name}</h3>
                         <p className="text-gold-300 mt-2">{coffee.description}</p>
-                        <p className="text-gold-400 mt-4">${coffee.price}</p>
-                        <button
-                            className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
-                            onClick={() => handleAddToCart(coffee)} // Trigger add to cart
-                        >
-                            Add to Cart
-                        </button>
+                        <p className="text-gold-400 mt-4">{coffee.price}</p>
+                        {/* Show edit and delete buttons only if admin is logged in */}
+                        {isAdmin && (
+                            <div className="flex justify-between mt-4">
+                                <button
+                                    className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
+                                    onClick={() => handleEdit(coffee._id)}
+                                >
+                                    Edit
+                                </button>
+                                <button
+                                    className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                                    onClick={() => handleDelete(coffee._id)}
+                                >
+                                    Delete
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </div>
             ))}
@@ -67,4 +86,5 @@ const CoffeeList = () => {
 };
 
 export default CoffeeList;
+
 
