@@ -40,6 +40,19 @@ app.use('/api/coffee', coffeeRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/users', userRoutes);
 
+app.get('/api/orders/cart', (req, res) => {
+    // Replace this with your actual logic to fetch cart data
+    const cartData = {
+      items: [
+        { id: 1, name: 'Product 1', quantity: 2 },
+        { id: 2, name: 'Product 2', quantity: 1 },
+      ],
+      total: 59.99,
+    };
+    res.json(cartData);
+  });
+  
+
 
 
 

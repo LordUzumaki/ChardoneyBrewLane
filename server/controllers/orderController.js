@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
-import Order from '../models/Order.js';
+
+import Order from '../models/order.js'; // Import the Order model
 
 // Fetch all orders for the current user
 export const getAllOrders = async (req, res) => {
@@ -72,70 +72,6 @@ export const getOrderById = async (req, res) => {
   }
 };
 
-export const addItemToCart = async (req, res) => {
-  const { coffeeId, name, price } = req.body;
-
-  // Ensure required data is provided
-  if (!coffeeId || !name || !price) {
-    return res.status(400).json({ message: 'Invalid item data' });
-  }
-
-  try {
-    // Use session ID for unauthenticated users (or generate a guest ID)
-    const sessionId = req.sessionID || 'guest';  // Fallback to guest if no session ID
-    
-    let order = await Order.findOne({ sessionId });
-
-    // If no cart exists for the session, create a new one
-    if (!order) {
-      order = new Order({
-        sessionId,
-        items: [{ coffeeId, name, price, quantity: 1 }],
-        totalAmount: price,
-        status: 'cart',  // Status of the cart
-      });
-    } else {
-      // Check if the item is already in the cart
-      const existingItem = order.items.find(item => item.coffeeId === coffeeId);
-
-      if (existingItem) {
-        existingItem.quantity += 1;  // Increase quantity if item exists
-      } else {
-        order.items.push({ coffeeId, name, price, quantity: 1 });  // Add new item if not in cart
-      }
-
-      // Recalculate total amount
-      order.totalAmount = order.items.reduce((total, item) => total + item.price * item.quantity, 0);
-    }
-
-    // Save the updated order (cart)
-    await order.save();
-    res.json(order);
-  } catch (error) {
-    res.status(500).json({ message: 'Error adding item to cart', error: error.message });
-  }
-};
-
-
-
-
-//Get cart details
-export const getCart = async (req, res) => {
-  const sessionId = req.sessionID || 'guest';  // Use session ID for non-auth users
-  
-  try {
-    // Look for a cart associated with the session ID
-    const order = await Order.findOne({ sessionId, status: 'cart' }).populate('items.coffeeId');
-
-    if (!order) {
-      return res.status(404).json({ message: 'Cart is empty' });  // No cart found
-    }
-
-    res.json(order);  // Return cart details
-  } catch (error) {
-    res.status(500).json({ message: 'Error fetching cart', error: error.message });
-  }
-};
 
 
 
@@ -159,35 +95,45 @@ export const checkout = async (req, res) => {
 };
 
 const GUEST_USER_ID = 'guest_user_id'; // ID of your predefined guest user
+
 export const addItemToCart = async (req, res) => {
   const { coffeeId, name, price } = req.body;
-  const userId = req.user ? req.user._id : GUEST_USER_ID;
+  const userId = req.user ? req.user._id : null;
+
+  console.log(`Received data: coffeeId=${coffeeId}, name=${name}, price=${price}`);
 
   try {
-    let order = await Order.findOne({ userId, status: 'cart' });
+    const filter = userId ? { userId, status: 'cart' } : { userId: null, status: 'cart' };
+    let order = await Order.findOne(filter);
 
     if (!order) {
       order = new Order({
         userId,
-        items: [{ coffeeId, name, price, quantity: 1 }],
-        totalPrice: price,
+        items: [{ coffeeId, name, price: Number(price), quantity: 1 }],
+        totalPrice: Number(price),
         status: 'cart',
       });
     } else {
-      const existingItem = order.items.find(item => item.coffeeId.equals(coffeeId));
+      const existingItem = order.items.find((item) =>
+        item.coffeeId.equals(coffeeId)
+      );
 
       if (existingItem) {
         existingItem.quantity += 1;
       } else {
-        order.items.push({ coffeeId, name, price, quantity: 1 });
+        order.items.push({ coffeeId, name, price: Number(price), quantity: 1 });
       }
 
-      order.totalPrice = order.items.reduce((total, item) => total + item.price * item.quantity, 0);
+      order.totalPrice = order.items.reduce(
+        (total, item) => total + item.price * item.quantity,
+        0
+      );
     }
 
     await order.save();
     res.json(order);
   } catch (error) {
+    console.error('Error in addItemToCart:', error);
     res.status(500).json({ message: 'Error adding item to cart' });
   }
 };
@@ -196,22 +142,26 @@ export const addItemToCart = async (req, res) => {
 
 
 
+
 export const getCart = async (req, res) => {
-  const userId = req.user ? req.user._id : GUEST_USER_ID;  // Use guest user if not logged in
+  const userId = req.user ? req.user._id : GUEST_USER_ID; // Use guest user if not logged in
 
   try {
-    const order = await Order.findOne({ userId, status: 'cart' }).populate('items.coffeeId');
+    const order = await Order.findOne({ userId, status: 'cart' }).populate(
+      'items.coffeeId'
+    );
 
     if (!order) {
-      return res.status(404).json({ message: 'Order not found' });
+      return res.status(404).json({ message: 'Cart not found' });
     }
 
     res.json(order);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching cart', error: error.message });
+    res
+      .status(500)
+      .json({ message: 'Error fetching cart', error: error.message });
   }
 };
-
 
 
 
@@ -231,6 +181,5 @@ export default {
   checkout,
   addItemToCart,
   getCart,
-  addItemToCart,
-  getCart,
+  
 };

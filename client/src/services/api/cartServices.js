@@ -1,16 +1,20 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:5000/api/orders/cart'; // Assuming this is the correct base URL
+const API_BASE_URL = 'http://localhost:5000/api/orders';
 
 // Add item to cart
-export const addItemToCart = async (itemData) => {
+export const addItemToCart = async (coffeeId, name, price) => {
   try {
-    const token = localStorage.getItem('token'); // Check if the user is logged in
-    const headers = token
-      ? { Authorization: `Bearer ${token}` }
-      : {}; // Send token if available
-
-    const response = await axios.post(API_BASE_URL, itemData, { headers });
+    const token = localStorage.getItem('token');
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    
+    // Explicitly convert price to a number before sending
+    const response = await axios.post(
+      `http://localhost:5000/api/orders/cart`,
+      { coffeeId, name, price: Number(price) },
+      { headers }
+    );
+    
     return response.data;
   } catch (error) {
     console.error('Error adding item to cart:', error);
@@ -20,15 +24,23 @@ export const addItemToCart = async (itemData) => {
 
 
 
-
+// Get cart items
 export const getCart = async () => {
   try {
-    const response = await axios.get(API_BASE_URL);
-    console.log('Cart data fetched:', response.data);
+    const token = localStorage.getItem('token'); // Check if the user is logged in
+    const headers = token
+      ? { Authorization: `Bearer ${token}` }
+      : {}; // Send token if available
+
+    const response = await axios.get(`${API_BASE_URL}/cart`, { headers });
     return response.data;
   } catch (error) {
-    console.error('Error fetching cart items:', error.response ? error.response.data : error.message);
-    throw error; // Ensure you re-throw it to propagate the error
+    console.error(
+      'Error fetching cart items:',
+      error.response ? error.response.data : error.message
+    );
+    throw error;
   }
 };
+
 

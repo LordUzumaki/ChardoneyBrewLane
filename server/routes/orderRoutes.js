@@ -9,8 +9,4 @@ router.get('/cart', getCart); // Retrieve cart items
 router.post('/cart', addItemToCart); // Add item to cart
 
 
-// Remove `authMiddleware` here, as it's not needed
-router.post('/cart', addItemToCart);
-router.get('/cart', getCart);
-
 export default router;

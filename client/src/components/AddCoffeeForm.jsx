@@ -44,15 +44,15 @@ const AddCoffeeForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const token = localStorage.getItem('token');  // Get auth token
-
+    
         const coffeeFormData = new FormData();
         coffeeFormData.append('name', formData.name);
-        coffeeFormData.append('price', formData.price);
+        coffeeFormData.append('price', Number(formData.price)); // Ensure price is a number
         coffeeFormData.append('description', formData.description);
         coffeeFormData.append('category', formData.category);
         coffeeFormData.append('available', formData.available);
         if (imageFile) coffeeFormData.append('image', imageFile);  // Append image if available
-
+    
         try {
             await addCoffee(coffeeFormData, token);  // Use the API to add or update
             navigate('/menu');  // Redirect to menu after submission
