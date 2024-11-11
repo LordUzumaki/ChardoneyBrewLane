@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   backend:
     build:
@@ -7,10 +5,15 @@ services:
       dockerfile: Dockerfile
     ports:
       - "5000:5000"
+    volumes:
+      - ./uploads:/app/uploads
     environment:
-      MONGO_URI: mongodb://mongo:27017/coffee_shop
+      MONGO_URI: mongodb+srv://Teddy1224:O%40thk33p3r@chardoneybrewlane.ce45g.mongodb.net/coffee_shop
+
     depends_on:
       - mongo
+    networks:
+      - app-network
 
   frontend:
     build:
@@ -18,15 +21,21 @@ services:
       dockerfile: Dockerfile
     ports:
       - "5173:5173"
+    environment:
+      - API_BASE_URL=http://backend:5000
+    networks:
+      - app-network
 
   mongo:
     image: mongo:latest
+    restart: always
     ports:
-      - "27017:27017"
+      - "27017:27017" 
     volumes:
-      - "/c/MongoDB/Server/7.0/data:/data/db"
-
-
-volumes:
-  mongo-data:
+      - "/c/data:/data/db"
+    networks:
+      - app-network
   
+networks:
+  app-network:
+    driver: bridge

@@ -1,4 +1,3 @@
-
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 
@@ -15,6 +14,10 @@ export default defineConfig({
         secure: false,
       },
     },
+  },
+  // Adding optimizeDeps configuration
+  optimizeDeps: {
+    include: ['jwt-decode'],  // Include jwt-decode for dependency optimization
   },
 });
 

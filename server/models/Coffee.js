@@ -5,7 +5,7 @@ const { Schema, model } = mongoose;
 const coffeeSchema = new Schema({
     name: {
         type: String,
-        required: true,
+        required: true, indexedDB: true,
     },
     price: {
         type: Number,
@@ -13,6 +13,17 @@ const coffeeSchema = new Schema({
     },
     description: {
         type: String,
+    },
+    imageUrl: {
+        type: String,
+    },
+    category: {
+        type: String,
+        required: true,
+    },
+    available: {
+        type: Boolean,
+        default: true,
     },
 });
 
