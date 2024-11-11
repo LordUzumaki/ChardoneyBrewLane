@@ -1,0 +1,46 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main  # Change to the branch you want to trigger the workflow
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    services:
+      mongo:
+        image: mongo:latest
+        ports:
+          - 27017:27017
+
+    env:
+      MONGO_URI: mongodb://mongo:27017/coffee_shop  # Adjust if your tests use a different DB URI
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Build and push backend image
+      run: |
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/my-backend:latest -f server/Dockerfile .
+        docker push ${{ secrets.DOCKER_USERNAME }}/my-backend:latest
+
+    - name: Build and push frontend image
+      run: |
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/my-frontend:latest -f client/Dockerfile .
+        docker push ${{ secrets.DOCKER_USERNAME }}/my-frontend:latest
+
+    - name: Deploy with Docker Compose
+      run: |
+        docker-compose -f docker-compose.yml up -d
