@@ -1,4 +1,4 @@
-
+import Coffee from '../models/Coffee.js'; // Import the Coffee model
 import Order from '../models/order.js'; // Import the Order model
 
 // Fetch all orders for the current user
@@ -99,44 +99,59 @@ const GUEST_USER_ID = 'guest_user_id'; // ID of your predefined guest user
 export const addItemToCart = async (req, res) => {
   const { coffeeId, name, price } = req.body;
   const userId = req.user ? req.user._id : null;
+  
+  ///const numericPrice = parseFloat(price);  // Convert to number if necessary
 
-  console.log(`Received data: coffeeId=${coffeeId}, name=${name}, price=${price}`);
 
   try {
-    const filter = userId ? { userId, status: 'cart' } : { userId: null, status: 'cart' };
-    let order = await Order.findOne(filter);
+    console.log(`Adding item to cart - Coffee ID: ${coffeeId}, Name: ${name}, Price: ${price}, User ID: ${userId}`);
+
+    const numericPrice = parseFloat(price); // Ensure price is a number
+    if (isNaN(numericPrice)) {
+      return res.status(400).json({ message: 'Invalid price format' });
+    }
+    
+    let order = await Order.findOne({ userId, status: 'cart' });
 
     if (!order) {
       order = new Order({
         userId,
-        items: [{ coffeeId, name, price: Number(price), quantity: 1 }],
-        totalPrice: Number(price),
+        items: [{ coffeeId, name, price, quantity: 1 }],
+        totalPrice: price,
         status: 'cart',
       });
     } else {
-      const existingItem = order.items.find((item) =>
-        item.coffeeId.equals(coffeeId)
-      );
+      const existingItem = order.items.find((item) => item.coffeeId.equals(coffeeId));
 
       if (existingItem) {
         existingItem.quantity += 1;
       } else {
-        order.items.push({ coffeeId, name, price: Number(price), quantity: 1 });
+        order.items.push({ coffeeId, name, price, quantity: 1 });
       }
 
-      order.totalPrice = order.items.reduce(
-        (total, item) => total + item.price * item.quantity,
-        0
-      );
+      // Calculate totalPrice correctly
+      order.items.forEach(item => {
+        console.log(`Calculating: ${item.name} - Price: ${item.price}, Quantity: ${item.quantity}`);
+      });
+      order.totalPrice = order.items.reduce((total, item) => {
+        const itemTotal = item.price * item.quantity;
+        console.log(`Item Total for ${item.name}: ${itemTotal}`);
+        return total + itemTotal;
+      }, 0);
+      
+      console.log("Calculated Order Total Price:", order.totalPrice);
+
     }
 
     await order.save();
     res.json(order);
   } catch (error) {
-    console.error('Error in addItemToCart:', error);
-    res.status(500).json({ message: 'Error adding item to cart' });
+    console.error("Error in addItemToCart:", error);
+    res.status(500).json({ message: "Error adding item to cart" });
   }
 };
+
+
 
 
 

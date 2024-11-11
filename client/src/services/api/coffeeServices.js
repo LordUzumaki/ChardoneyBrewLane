@@ -14,27 +14,16 @@ export const getAllCoffees = async () => {
 
 export const addCoffee = async (coffeeData, token) => {
     try {
-      const formData = new FormData();
-      formData.append('name', coffeeData.name);
-      formData.append('price', coffeeData.price);
-      formData.append('description', coffeeData.description);
-      formData.append('category', coffeeData.category);
-      formData.append('available', coffeeData.available);
-      formData.append('image', coffeeData.image); // Ensure 'image' is a File object
-  
-      const response = await axios.post('http://localhost:5000/api/coffee/add', formData, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-  
-      return response.data;
+        const response = await axios.post(`${API_BASE_URL}/add`, coffeeData, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+        });
+        return response.data;
     } catch (error) {
-      console.error('Error adding coffee:', error.response?.data || error.message);
-      throw error;
+        console.error('Error adding coffee:', error);
+        throw error;
     }
-  
 };
 
 // Fix: Use API_BASE_URL and include Authorization header
@@ -43,14 +32,15 @@ export const deleteCoffee = async (id, token) => {
         const response = await axios.delete(`${API_BASE_URL}/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
-            },
+            }
         });
         return response.data;
     } catch (error) {
-        console.error('Error deleting coffee:', error);
+        console.error('Error deleting coffee:', error.response?.data || error.message); // Log exact error message
         throw error;
     }
 };
+
 
 // Fix: Use API_BASE_URL and include Authorization header
 export const updateCoffee = async (id, coffeeData, token) => {

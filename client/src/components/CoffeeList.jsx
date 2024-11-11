@@ -29,14 +29,36 @@ const CoffeeList = () => {
   }, []);
 
   const handleAddToCart = async (coffee) => {
-    console.log(`Adding to cart: ${coffee.name}, Price: ${coffee.price}`);  // Log coffee details
+    console.log(`Adding to cart: ${coffee.name}, Price: ${coffee.price}`);  // Verify details
     try {
-      const addedItem = await addItemToCart(coffee._id, coffee.name, Number(coffee.price));
-      addToCart(addedItem);
+      const numericPrice = parseFloat(coffee.price); // Ensure price is a number
+      if (isNaN(numericPrice)) {
+        console.error('Invalid price format');
+        return;
+      }
+      // Pass the item with correct properties to `addToCart`
+      addToCart({ ...coffee, price: numericPrice });
     } catch (error) {
       console.error('Error adding item to cart:', error);
     }
   };
+  
+  const handleDeleteCoffee = async (coffeeId) => {
+    const token = localStorage.getItem('token'); // Ensure token retrieval
+    if (!token) {
+        console.error("Token missing, unable to delete coffee.");
+        return;
+    }
+    console.log("Token:", token); // Check the token's value
+
+    try {
+        await deleteCoffee(coffeeId, token);
+        setCoffees(coffees.filter(coffee => coffee._id !== coffeeId)); // Update UI on successful delete
+    } catch (error) {
+        console.error("Delete failed:", error);
+    }
+};
+
   
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
@@ -70,7 +92,7 @@ const CoffeeList = () => {
                 </button>
                 <button
                   className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-                  onClick={() => deleteCoffee(coffee._id)}
+                  onClick={() => handleDeleteCoffee(coffee._id)}
                 >
                   Delete
                 </button>

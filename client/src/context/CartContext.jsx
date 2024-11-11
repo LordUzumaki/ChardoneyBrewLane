@@ -8,18 +8,33 @@ export const CartProvider = ({ children }) => {
 
   const addToCart = (item) => {
     setCartItems((prevItems) => {
-      const itemExists = prevItems.find((i) => i.id === item.id);
+      const itemExists = prevItems.find((i) => i._id === item._id);
       if (itemExists) {
         return prevItems.map((i) =>
-          i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
+          i._id === item._id ? { ...i, quantity: i.quantity + 1 } : i
         );
       }
       return [...prevItems, { ...item, quantity: 1 }];
     });
   };
 
+  // Updated removeFromCart function
   const removeFromCart = (itemId) => {
-    setCartItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
+    setCartItems((prevItems) =>
+      prevItems
+        .map((item) => {
+          if (item._id === itemId) {
+            // Decrease quantity if greater than 1
+            if (item.quantity > 1) {
+              return { ...item, quantity: item.quantity - 1 };
+            }
+            // Return null if quantity is 1 (to remove it)
+            return null;
+          }
+          return item;
+        })
+        .filter((item) => item !== null) // Filter out null entries (items with quantity 0)
+    );
   };
 
   return (
@@ -30,4 +45,3 @@ export const CartProvider = ({ children }) => {
 };
 
 export const useCart = () => useContext(CartContext);
-

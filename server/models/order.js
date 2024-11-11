@@ -8,7 +8,7 @@ const orderSchema = new Schema({
       {
         coffeeId: { type: mongoose.Schema.Types.ObjectId, ref: 'Coffee' },
         name: String,
-        price: Number,
+        price: { type: Number },
         quantity: { type: Number, default: 1 },
       },
     ],
